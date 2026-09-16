@@ -11,10 +11,10 @@ Split: temporal leave-one-out per user (last rating = test, second-to-last = val
 | User-based CF | 0.0747 | 0.0376 | 0.2846 | 0.7409 |
 
 **Takeaways:**
-- User-based CF roughly **doubles** both Hit Rate@10 and NDCG@10 over the non-personalized popularity baseline — confirms personalization is doing real work, not just noise.
-- Catalog coverage jumps from ~5% to ~28%, showing CF draws recommendations from a much wider slice of the catalog rather than serving the same shortlist to everyone.
-- Intra-list diversity stayed roughly flat (~0.75 for both) — both models already spread each individual user's list across a reasonable genre mix, so this metric wasn't the differentiator here. Included regardless, since it's tracked from Week 1 onward specifically to catch models that might quietly sacrifice per-list variety for accuracy — worth watching as later models (ALS, NCF) are added.
-- Note: our Hit Rate/NDCG numbers run somewhat below commonly-cited reference ranges for this dataset, likely due to differences in evaluation protocol (e.g., k, candidate pool size). The comparison *between our own models*, on a fixed shared split, is the reliable signal here.
+- User-based CF roughly **doubles** both Hit Rate@10 and NDCG@10 over the non-personalized popularity baseline — confirms personalization is real.
+- Catalog coverage jumps from ~5% to ~28%, showing CF draws recommendations from a much wider slice of the catalog and working as hoped.
+- Intra-list diversity stayed roughly flat (~0.75 for both) — both models already spread each individual user's list across a reasonable genre mix.
+- Note: our Hit Rate/NDCG numbers run is below commonly-cited reference ranges for this dataset, likely due to differences in evaluation protocol (e.g., k, candidate pool size). The comparison *between our own models*, on a fixed shared split, is the reliable signal here.
 
 ├── src/
 │   ├── data/            # load_data.py, split.py
