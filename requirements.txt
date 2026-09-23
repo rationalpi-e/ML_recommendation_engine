@@ -7,3 +7,4 @@ seaborn
 jupyter
 implicit
 torch
+optuna
