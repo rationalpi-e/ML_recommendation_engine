@@ -1,4 +1,5 @@
 """Training loop for Neural Collaborative Filtering."""
+import time
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -18,13 +19,17 @@ def train_ncf(epochs: int = 5, batch_size: int = 1024, lr: float = 0.001,
     ratings = load_ratings()
     train_df, val_df, test_df = temporal_split(ratings)
 
+    t0 = time.time()
     train_dataset = NCFDataset(train_df, n_negatives=n_negatives)
+    print(f"Train dataset built in {time.time() - t0:.1f}s")
 
+    t0 = time.time()
     val_dataset = NCFDataset(
         val_df, n_negatives=n_negatives,
         user_id_to_idx=train_dataset.user_id_to_idx,
         movie_id_to_idx=train_dataset.movie_id_to_idx,
     )
+    print(f"Val dataset built in {time.time() - t0:.1f}s")
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
@@ -39,6 +44,8 @@ def train_ncf(epochs: int = 5, batch_size: int = 1024, lr: float = 0.001,
     criterion = nn.BCELoss()
 
     for epoch in range(1, epochs + 1):
+        t0 = time.time()
+
         # --- Training ---
         model.train()
         train_loss = 0.0
@@ -65,7 +72,8 @@ def train_ncf(epochs: int = 5, batch_size: int = 1024, lr: float = 0.001,
                 val_loss += loss.item() * len(labels)
         val_loss /= len(val_dataset)
 
-        print(f"Epoch {epoch}/{epochs} — Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
+        elapsed = time.time() - t0
+        print(f"Epoch {epoch}/{epochs} — Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f} ({elapsed:.1f}s)")
 
     return model, train_dataset
 
